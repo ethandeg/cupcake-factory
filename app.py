@@ -15,10 +15,12 @@ debug = DebugToolbarExtension(app)
 connect_db(app)
 db.create_all()
 
+
 @app.route('/')
 def show_home_page():
     form = AddCupcakeForm()
-    return render_template('home.html',form=form)
+    return render_template('home.html', form=form)
+
 
 @app.route('/api/cupcakes')
 def show_cupcakes():
@@ -31,15 +33,20 @@ def show_cupcake(id):
     cupcake = Cupcake.query.get_or_404(id)
     return jsonify(cupcake=cupcake.serialize())
 
+
 @app.route('/api/cupcakes', methods=['POST'])
 def add_cupcake():
     form = AddCupcakeForm()
+    # import pdb
+    # pdb.set_trace()
     if form.validate_on_submit():
         flavor = request.json['flavor']
         size = request.json['size']
         rating = request.json['rating']
         image = request.json.get('image', None)
-        new_cupcake = Cupcake(flavor=flavor, size=size, rating=rating, image=image)
+
+        new_cupcake = Cupcake(flavor=flavor, size=size,
+                              rating=rating, image=image)
         print(new_cupcake)
         db.session.add(new_cupcake)
         db.session.commit()
@@ -48,7 +55,8 @@ def add_cupcake():
     else:
         return render_template('home.html')
 
-@app.route('/api/cupcakes/<int:id>', methods =['PATCH'])
+
+@app.route('/api/cupcakes/<int:id>', methods=['PATCH'])
 def update_cupcake(id):
     cupcake = Cupcake.query.get_or_404(id)
     cupcake.flavor = request.json.get('flavor', cupcake.flavor)
@@ -58,7 +66,8 @@ def update_cupcake(id):
     db.session.commit()
     return jsonify(cupcake=cupcake.serialize())
 
-@app.route('/api/cupcakes/<int:id>', methods =['DELETE'])
+
+@app.route('/api/cupcakes/<int:id>', methods=['DELETE'])
 def delete_cupcake(id):
     cupcake = Cupcake.query.get_or_404(id)
     db.session.delete(cupcake)
