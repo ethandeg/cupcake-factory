@@ -24,7 +24,6 @@ function handleButtonHandler(e) {
 	document.addEventListener('click', (e) => {
 		if (e.target.className === 'editButton') {
 			let target = Number(e.target.dataset.id);
-			console.log(target);
 			return target;
 			// create edit function
 		}
@@ -68,7 +67,22 @@ addForm.addEventListener('submit', async function(e) {
 		csrf_token: token
 	});
 
-	console.log(res);
+	if (res.status === 201) {
+		const data = res.data.cupcake;
+		cupcakeBlock.classList.toggle('no-display');
+		addForm.classList.toggle('no-display');
+		const newDiv = document.createElement('div');
+		newDiv.classList.add('flex-div');
+		newDiv.innerHTML = `<h5>${data.flavor}</h5>
+                                <img src = "${data.image}" class = "top-image">
+                                <h3>${data.size}</h3>
+                                <h3>${data.rating}</h3>
+                                <button class  = 'editButton' data-id = ${data.id}>Edit</button>
+                                <button class = 'deleteButton' data-id = ${data.id}>Delete</button
+                                `;
+
+		cupcakeBlock.appendChild(newDiv);
+	}
 });
 
 handleButtonHandler();
