@@ -60,16 +60,14 @@ addForm.addEventListener('submit', async function(e) {
 	let rating = Number(document.querySelector('#rating').value);
 	let image = document.querySelector('#image').value;
 	let token = document.querySelector('#csrf_token').value;
-	const res = await axios.post(
-		'http://localhost:5000/api/cupcakes',
-		(params = {
-			flavor,
-			rating,
-			size,
-			image,
-			csrf_token: token
-		})
-	);
+	const res = await axios.post('api/cupcakes', {
+		flavor,
+		rating,
+		size,
+		image,
+		csrf_token: token
+	});
+
 	console.log(res);
 });
 
